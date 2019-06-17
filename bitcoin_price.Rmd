@@ -1,0 +1,38 @@
+---
+title: "Bitcoin Price 12/2018 - 01/2019"
+author: "by mas16"
+date: "17 June 2019"
+output: ioslides_presentation
+---
+
+## Bitcoin Price Dec 2018 - Jan 2019
+
+This is an interactive time series plot of the value of bitcoin in USD from Dec 2018 - Jan 2019. Data was collected every minute by the cryptocurrency exchange, Coinbase.
+
+## Code
+```{r echo = TRUE, message = FALSE}
+library(lubridate)
+library(plotly)
+setwd("/Users/matthewstetz/Desktop/bitcoin-historical-data/")
+btc_data <- read.csv(
+        "coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv")
+btc_data$Timestamp <- as_datetime(btc_data$Timestamp) 
+time_cutoff <- ymd_hms("2018-12-07 00:00:01")
+btc_data <- btc_data[!is.na(btc_data$Weighted_Price), ]
+btc_data <- btc_data[btc_data$Timestamp > time_cutoff,]
+title <- "Bitcoin Value Dec 2018 - Jan 2019"
+x <- list(title="Date")
+y <- list(title="Value (USD)")
+p <- plot_ly(x=btc_data$Timestamp, y=btc_data$Weighted_Price, 
+             mode="lines") %>% layout(title=title, xaxis=x, yaxis=y)
+
+```
+
+## Time Series Plot of Bitcoin Value (USD) Dec 2018 - Jan 2019
+
+#### 17 June 2019
+
+```{r echo = FALSE, message = FALSE}
+p
+```
+
